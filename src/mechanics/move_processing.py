@@ -1,4 +1,4 @@
-from game.game_logic import is_winner
+from mechanics.game_logic import is_winner
 
 def make_move(state: dict, x: int, y: int) -> tuple[bool, str | None]:
     """

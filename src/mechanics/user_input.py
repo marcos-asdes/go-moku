@@ -1,6 +1,7 @@
-from files import save_game, log_error
-from interface import display_message
-from mechanics import make_move
+from files.file_operations import save_game
+from files.logging import log_error
+from interface.display import display_message
+from mechanics.move_processing import make_move
 
 def handle_user_input(state: dict, user_input: str) -> tuple[bool, dict]:
     """

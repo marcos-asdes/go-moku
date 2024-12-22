@@ -1,7 +1,7 @@
 from files.logging import log_history, log_error
 from interface.display import display_message, print_board
 from mechanics.user_input import handle_user_input
-from game.menu_management import handle_pause_menu
+from interface.pause_menu import handle_pause_menu
 
 def play_game(state: dict) -> bool:
     """
@@ -47,3 +47,4 @@ def play_game(state: dict) -> bool:
     # Registrar o histórico da partida
     log_history(state)
     return True
+

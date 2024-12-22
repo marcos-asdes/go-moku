@@ -1,4 +1,5 @@
-from utils import get_timestamp
+from utils.time_utils import get_timestamp
+from utils.constants import HISTORY_FILE_PATH
 
 def log_error(error_message: str, filename: str = "gomoku_errors.log") -> None:
     """
@@ -26,7 +27,7 @@ def log_history(state: dict) -> None:
     None
     """
     timestamp = get_timestamp()
-    with open('saves/history.txt', 'a') as file:
+    with open(HISTORY_FILE_PATH, 'a') as file:
         if state['winner']:
             file.write(f"{timestamp} - Vencedor: {state['winner']} - Movimentos: {state['moves']}\n")
         else:

@@ -1,4 +1,4 @@
-from game.menu_management import render_main_menu
+from interface.main_menu import render_main_menu
 
 def main() -> None:
     """
