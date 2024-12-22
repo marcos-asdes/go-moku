@@ -15,47 +15,97 @@ def ai_move(state: dict) -> tuple[int, int]:
     player = state['turn']
     opponent = 'X' if player == 'O' else 'O'
 
+    best_move = get_best_move(state, size, board, player, opponent)
+    if best_move != (-1, -1) and board[best_move[0] - 1][best_move[1] - 1] == '.':
+        return best_move
+
+    return get_random_move(size, board)
+
+def get_best_move(state: dict, size: int, board: list, player: str, opponent: str) -> tuple[int, int]:
+    """
+    Encontra o melhor movimento possível para o jogador atual.
+
+    Parâmetros:
+    state (dict) → Estado atual do jogo.
+    size (int) → Tamanho do tabuleiro.
+    board (list) → Representação do tabuleiro do jogo.
+    player (str) → Jogador atual ('X' ou 'O').
+    opponent (str) → Oponente do jogador atual ('X' ou 'O').
+
+    Retorno:
+    tuple[int, int] → Coordenadas (x, y) do melhor movimento encontrado.
+    """
     best_score = -1
     best_move = (-1, -1)
 
     for x in range(size):
         for y in range(size):
             if board[x][y] == '.':
-                # Avaliar movimento para o jogador
-                board[x][y] = player
-                if is_winner(state, x, y):
-                    board[x][y] = '.'  # Reverter a jogada
-                    return x + 1, y + 1
-                player_score = evaluate_move(state, x, y, player)
-                board[x][y] = '.'
-
-                # Avaliar movimento para o oponente
-                board[x][y] = opponent
-                if is_winner(state, x, y):
-                    board[x][y] = '.'  # Reverter a jogada
-                    return x + 1, y + 1
-                opponent_score = evaluate_move(state, x, y, opponent)
-                board[x][y] = '.'
-
-                # Escolher o movimento com a melhor pontuação
+                player_score, opponent_score = evaluate_all_moves(state, x, y, player, opponent)
                 total_score = player_score + opponent_score
                 if total_score > best_score:
                     best_score = total_score
                     best_move = (x + 1, y + 1)
+    return best_move
 
-    # Verificar se a célula escolhida está ocupada
-    if best_move != (-1, -1) and board[best_move[0] - 1][best_move[1] - 1] == '.':
-        return best_move
+def evaluate_all_moves(state: dict, x: int, y: int, player: str, opponent: str) -> tuple[int, int]:
+    """
+    Avalia os movimentos para o jogador atual e o oponente.
 
-    # Fazer um movimento aleatório se não houver melhor
+    Parâmetros:
+    state (dict) → Estado atual do jogo.
+    x (int) → Coordenada x do movimento.
+    y (int) → Coordenada y do movimento.
+    player (str) → Jogador atual ('X' ou 'O').
+    opponent (str) → Oponente do jogador atual ('X' ou 'O').
+
+    Retorno:
+    tuple[int, int] → Pontuações dos movimentos para o jogador atual e o oponente.
+    """
+    player_score = evaluate_single_move(state, x, y, player)
+    opponent_score = evaluate_single_move(state, x, y, opponent)
+    return player_score, opponent_score
+
+def evaluate_single_move(state: dict, x: int, y: int, player: str) -> float:
+    """
+    Avalia um único movimento para o jogador atual.
+
+    Parâmetros:
+    state (dict) → Estado atual do jogo.
+    x (int) → Coordenada x do movimento.
+    y (int) → Coordenada y do movimento.
+    player (str) → Jogador atual ('X' ou 'O').
+
+    Retorno:
+    float → Pontuação do movimento. Retorna float('inf') se o movimento resultar em vitória.
+    """
+    board = state['board']
+    board[x][y] = player
+    if is_winner(state, x, y):
+        board[x][y] = '.'
+        return float('inf')
+    score = calculate_move_score(state, x, y, player)
+    board[x][y] = '.'
+    return score
+
+def get_random_move(size: int, board: list) -> tuple[int, int]:
+    """
+    Encontra um movimento aleatório no tabuleiro.
+
+    Parâmetros:
+    size (int) → Tamanho do tabuleiro.
+    board (list) → Representação do tabuleiro do jogo.
+
+    Retorno:
+    tuple[int, int] → Coordenadas (x, y) de um movimento aleatório encontrado.
+    """
     for x in range(size):
         for y in range(size):
             if board[x][y] == '.':
                 return x + 1, y + 1
+    return 1, 1
 
-    return 1, 1  # Movimento padrão se não houver melhor
-
-def evaluate_move(state: dict, x: int, y: int, player: str) -> int:
+def calculate_move_score(state: dict, x: int, y: int, player: str) -> int:
     """
     Avalia a qualidade de um movimento.
 
