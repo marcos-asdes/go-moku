@@ -1,6 +1,7 @@
 import os
-from interface import display_message
-from utils import ensure_directory_exists
+from interface.display import display_message
+from utils.file_utils import ensure_directory_exists
+from utils.constants import HISTORY_FILE_PATH
 
 def show_game_history() -> None:
     """
@@ -13,11 +14,11 @@ def show_game_history() -> None:
     ensure_directory_exists('saves')
 
     # Garantir que o arquivo 'history.txt' exista
-    if not os.path.exists('saves/history.txt'):
-        with open('saves/history.txt', 'w') as file:
+    if not os.path.exists(HISTORY_FILE_PATH):
+        with open(HISTORY_FILE_PATH, 'w') as file:
             file.write("")
 
-    with open('saves/history.txt', 'r') as file:
+    with open(HISTORY_FILE_PATH, 'r') as file:
         history = file.readlines()
 
     if not history:

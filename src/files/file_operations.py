@@ -1,4 +1,4 @@
-from utils import ensure_directory_exists
+from utils.file_utils import ensure_directory_exists
 
 def save_game(state: dict, filename: str = "gomoku_save.txt") -> None:
     """

@@ -1,6 +1,6 @@
 import os
-from interface import display_message
-from files.logging import log_error
+from interface.display import display_message
+from interface.file_menu import handle_file_menu
 
 def show_main_menu() -> str:
     """
@@ -51,21 +51,7 @@ def show_file_menu(action: str) -> str | None:
     for i, file in enumerate(files, 1):
         display_message(f"{i}. {file}")
     display_message("0. Voltar")
-
-    while True:
-        try:
-            if action == 'salvar':
-                return input("Digite o nome do novo arquivo (sem extensão): ") + ".save"
-            choice = int(input("Escolha um arquivo ou 0 para voltar: "))
-            if choice == 0:
-                return None
-            if 1 <= choice <= len(files):
-                return files[choice - 1]
-            else:
-                display_message("Escolha inválida. Por favor, escolha um número válido.")
-        except ValueError as e:
-            display_message("Entrada inválida. Por favor, insira um número válido.")
-            log_error(str(e))
+    return handle_file_menu(action, files)
 
 def show_game_rules() -> None:
     """
