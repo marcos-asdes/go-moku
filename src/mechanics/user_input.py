@@ -26,6 +26,12 @@ def handle_user_input(state: dict, user_input: str, custom_save_name: str = None
         log_error(str(e))
         return False, state
 
+    if state["board"][x-1][y-1] != ".":
+        error_message = "A célula já está ocupada."
+        display_message(error_message)
+        log_error(error_message)
+        return False, state
+
     success, error = make_move(state, x, y)
     if not success:
         display_message(error)

@@ -1,7 +1,9 @@
-from files.logging import log_history, log_error
+from files.logging import log_error, log_history
 from interface.display import display_message, print_board
-from mechanics.user_input import handle_user_input
 from interface.pause_menu import handle_pause_menu
+from mechanics.ai import ai_move
+from mechanics.user_input import handle_user_input
+# ...existing code...
 
 def play_game(state: dict, custom_save_name: str = None) -> bool:
     """
@@ -22,19 +24,23 @@ def play_game(state: dict, custom_save_name: str = None) -> bool:
             display_message(f"Turno de {state['turn']}.")
             display_message("Pressione 'P' para pausar ou insira sua jogada (linha e coluna):")
 
-            user_input = input("> ").strip()
+            if state['turn'] == 'O':  # Supondo que 'O' seja a IA
+                x, y = ai_move(state)
+                display_message(f"IA jogou em: {x} {y}")
+                valid_move, state = handle_user_input(state, f"{x} {y}", custom_save_name)
+            else:
+                user_input = input("> ").strip()
+                if user_input.lower() == 'p':  # Caso o jogador pressione 'P'
+                    new_state, new_custom_save_name = handle_pause_menu(state, custom_save_name)
+                    if new_state is None:
+                        return False  # Voltar ao menu principal
+                    state = new_state
+                    custom_save_name = new_custom_save_name
+                    continue
 
-            if user_input.lower() == 'p':  # Caso o jogador pressione 'P'
-                new_state, new_custom_save_name = handle_pause_menu(state, custom_save_name)
-                if new_state is None:
-                    return False  # Voltar ao menu principal
-                state = new_state
-                custom_save_name = new_custom_save_name
-                continue
-
-            valid_move, state = handle_user_input(state, user_input, custom_save_name)
-            if not valid_move:
-                continue
+                valid_move, state = handle_user_input(state, user_input, custom_save_name)
+                if not valid_move:
+                    continue
         except Exception as e:
             log_error(str(e))
             display_message("Ocorreu um erro durante o jogo. Verifique o arquivo de log para mais detalhes.")
