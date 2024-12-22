@@ -31,18 +31,18 @@ def get_choice(files: list[str]) -> str | None:
     Retorno:
     str | None → Nome do arquivo escolhido ou None se o usuário optar por voltar.
     """
-    try:
-        choice = int(input("Escolha um arquivo ou 0 para voltar: "))
-        if choice == 0:
-            return None
-        if 1 <= choice <= len(files):
-            return files[choice - 1]
-        else:
-            display_message("Escolha inválida. Por favor, escolha um número válido.")
-    except ValueError as e:
-        display_message("Entrada inválida. Por favor, insira um número válido.")
-        log_error(str(e))
-    return None
+    while True:
+        try:
+            choice = int(input("Escolha um arquivo ou 0 para voltar: "))
+            if choice == 0:
+                return None
+            if 1 <= choice <= len(files):
+                return files[choice - 1]
+            else:
+                display_message("Escolha inválida. Por favor, escolha um número válido.")
+        except ValueError as e:
+            display_message("Entrada inválida. Por favor, insira um número válido.")
+            log_error(str(e))
 
 def handle_file_menu(action: str, files: list[str]) -> str | None:
     """
@@ -62,5 +62,7 @@ def handle_file_menu(action: str, files: list[str]) -> str | None:
                 return filename
         else:
             choice = get_choice(files)
-            if choice:
+            if choice is not None:
                 return choice
+            else:
+                return None

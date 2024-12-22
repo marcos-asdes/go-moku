@@ -1,15 +1,17 @@
 from files.file_operations import save_game
 from files.logging import log_error
 from interface.display import display_message
+from files.auto_save import auto_save_game
 from mechanics.move_processing import make_move
 
-def handle_user_input(state: dict, user_input: str) -> tuple[bool, dict]:
+def handle_user_input(state: dict, user_input: str, custom_save_name: str = None) -> tuple[bool, dict]:
     """
     Processa a entrada do usuário.
 
     Parâmetros:
     state (dict) → Estado atual do jogo.
     user_input (str) → Entrada do usuário contendo a linha e a coluna.
+    custom_save_name (str) → Nome personalizado do arquivo de save, se houver.
 
     Retorno:
     tuple[bool, dict] → Um tuple contendo um booleano indicando se a jogada foi válida e o estado atualizado do jogo.
@@ -31,10 +33,6 @@ def handle_user_input(state: dict, user_input: str) -> tuple[bool, dict]:
         return False, state
 
     # Salvar automaticamente após cada jogada
-    try:
-        save_game(state, f"saves/{state['turn']}_{state['moves']}.save")
-    except Exception as e:
-        log_error(str(e))
-        display_message("Erro ao salvar o jogo. Verifique o arquivo de log para mais detalhes.")
+    auto_save_game(state, custom_save_name)
     
     return True, state
