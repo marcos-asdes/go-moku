@@ -1,9 +1,12 @@
-def initialize_game(size: int) -> dict:
+def initialize_game(size: int, mode: str, player1_name: str, player2_name: str = None) -> dict:
     """
     Inicializa o estado do jogo.
 
     Parâmetros:
     size (int) → Tamanho do tabuleiro.
+    mode (str) → Modo de jogo ('1' para um jogador, '2' para dois jogadores).
+    player1_name (str) → Nome do jogador 1.
+    player2_name (str) → Nome do jogador 2 (opcional).
 
     Retorno:
     dict → Estado inicial do jogo.
@@ -13,5 +16,8 @@ def initialize_game(size: int) -> dict:
         "board": [["." for _ in range(size)] for _ in range(size)],
         "turn": "X",
         "winner": None,
-        "moves": 0
+        "moves": 0,
+        "mode": mode,
+        "player1_name": player1_name,
+        "player2_name": player2_name if player2_name else "IA"
     }

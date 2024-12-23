@@ -3,7 +3,6 @@ from interface.display import display_message, print_board
 from interface.pause_menu import handle_pause_menu
 from mechanics.ai import ai_move
 from mechanics.user_input import handle_user_input
-# ...existing code...
 
 def play_game(state: dict, custom_save_name: str = None) -> bool:
     """
@@ -21,10 +20,11 @@ def play_game(state: dict, custom_save_name: str = None) -> bool:
         try:
             display_message("\n")
             print_board(state)
-            display_message(f"Turno de {state['turn']}.")
+            current_player_name = state['player1_name'] if state['turn'] == 'X' else state['player2_name']
+            display_message(f"Turno de {current_player_name} - peça {state['turn']}.")
             display_message("Pressione 'P' para pausar ou insira sua jogada (linha e coluna):")
 
-            if state['turn'] == 'O':  # Supondo que 'O' seja a IA
+            if state['mode'] == '1' and state['turn'] == 'O':  # Modo um jogador e turno da IA
                 x, y = ai_move(state)
                 display_message(f"IA jogou em: {x} {y}")
                 valid_move, state = handle_user_input(state, f"{x} {y}", custom_save_name)
@@ -48,7 +48,8 @@ def play_game(state: dict, custom_save_name: str = None) -> bool:
     
     print_board(state)
     if state["winner"]:
-        display_message(f"Jogador {state['winner']} venceu!")
+        winner_name = state['player1_name'] if state['winner'] == 'X' else state['player2_name']
+        display_message(f"{winner_name} venceu!")
     else:
         display_message("Isso é um empate!")
 

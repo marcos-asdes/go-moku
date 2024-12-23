@@ -74,5 +74,5 @@ def show_credits() -> None:
     display_message("\nCréditos:")
     display_message("Autor: Marcos Antonio")
     display_message("LinkedIn: https://www.linkedin.com/in/marcos-asdes/")
-    display_message("Versão: 1.0")
-    display_message("Futuras melhorias: IA para jogar contra o computador.")
+    display_message("Versão: 2.0")
+    display_message("Futuras melhorias: Implementar interface gráfica.")

@@ -27,8 +27,13 @@ def log_history(state: dict) -> None:
     None
     """
     timestamp = get_timestamp()
+    mode = "1 jogador" if state['mode'] == '1' else "2 jogadores"
+    player1_name = state['player1_name']
+    player2_name = "IA" if state['mode'] == '1' else state['player2_name']
+    
     with open(HISTORY_FILE_PATH, 'a') as file:
         if state['winner']:
-            file.write(f"{timestamp} - Vencedor: {state['winner']} - Movimentos: {state['moves']}\n")
+            winner_name = state['player1_name'] if state['winner'] == 'X' else state['player2_name']
+            file.write(f"{timestamp} - Modo: {mode} - {player1_name} x {player2_name} - Vencedor: {winner_name} - Movimentos: {state['moves']}\n")
         else:
-            file.write(f"{timestamp} - Empate - Movimentos: {state['moves']}\n")
+            file.write(f"{timestamp} - Modo: {mode} - {player1_name} x {player2_name} - Empate - Movimentos: {state['moves']}\n")

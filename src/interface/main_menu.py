@@ -14,8 +14,16 @@ def render_main_menu() -> None:
     while True:
         choice = show_main_menu()
         if choice == '1':  # Iniciar jogo
-            if not start_new_game():
-                continue
+            mode = input("Selecione o modo de jogo (1: Um jogador, 2: Dois jogadores): ").strip()
+            if mode == '1' or mode == '2':
+                player1_name = input("Digite o nome do jogador 1: ").strip()
+                player2_name = None
+                if mode == '2':
+                    player2_name = input("Digite o nome do jogador 2: ").strip()
+                if not start_new_game(mode, player1_name, player2_name):
+                    continue
+            else:
+                display_message("Opção inválida. Tente novamente.")
         elif choice == '2':  # Carregar jogo
             if not load_and_play_game():
                 continue
