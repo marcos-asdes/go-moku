@@ -1,6 +1,7 @@
 import argparse
-from interface.main_menu import render_main_menu
-from mechanics.start_and_load import start_new_game, load_game
+from files.load_game_state import load_game_state
+from interface.main_menu import main_menu
+from mechanics.initialize_new_game import initialize_new_game
 from utils.file_utils import ensure_directory_exists, extract_save_name
 from mechanics.game_flow import play_game
 
@@ -29,15 +30,15 @@ def main() -> None:
     args = parse_arguments()
 
     if args.new_game:
-        start_new_game()
+        initialize_new_game()
         return
 
     if args.load_game:
         ensure_directory_exists('saves')
-        state = load_game(f"saves/{args.load_game}")
-        custom_save_name = extract_save_name(args.load_game) 
+        state = load_game_state(f"saves/{args.load_game}")
         if state:
-            play_game(state, custom_save_name)
+            state['save_name'] = extract_save_name(args.load_game)
+            play_game(state)
         return
 
     if args.show_history:
@@ -55,7 +56,7 @@ def main() -> None:
         show_credits()
         return
 
-    render_main_menu()
+    main_menu()
 
 if __name__ == "__main__":
     main()
