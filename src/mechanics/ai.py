@@ -48,7 +48,7 @@ def get_best_move(state: dict, size: int, board: list, player: str, opponent: st
                     best_move = (x + 1, y + 1)
     return best_move
 
-def evaluate_all_moves(state: dict, x: int, y: int, player: str, opponent: str) -> tuple[int, int]:
+def evaluate_all_moves(state: dict, x: int, y: int, player: str, opponent: str) -> tuple[float | int, float | int]:
     """
     Avalia os movimentos para o jogador atual e o oponente.
 
@@ -60,13 +60,13 @@ def evaluate_all_moves(state: dict, x: int, y: int, player: str, opponent: str) 
     opponent (str) → Oponente do jogador atual ('X' ou 'O').
 
     Retorno:
-    tuple[int, int] → Pontuações dos movimentos para o jogador atual e o oponente.
+    tuple[float | int, float | int] → Pontuações dos movimentos para o jogador atual e o oponente.
     """
     player_score = evaluate_single_move(state, x, y, player)
     opponent_score = evaluate_single_move(state, x, y, opponent)
     return player_score, opponent_score
 
-def evaluate_single_move(state: dict, x: int, y: int, player: str) -> float:
+def evaluate_single_move(state: dict, x: int, y: int, player: str) -> float | int:
     """
     Avalia um único movimento para o jogador atual.
 
@@ -77,7 +77,7 @@ def evaluate_single_move(state: dict, x: int, y: int, player: str) -> float:
     player (str) → Jogador atual ('X' ou 'O').
 
     Retorno:
-    float → Pontuação do movimento. Retorna float('inf') se o movimento resultar em vitória.
+    float | int → Pontuação do movimento. Retorna float('inf') se o movimento resultar em vitória e int se for um movimento padrão.
     """
     board = state['board']
     board[x][y] = player
