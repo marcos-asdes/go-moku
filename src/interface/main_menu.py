@@ -1,39 +1,37 @@
 import sys
 from interface.menus import show_credits, show_game_rules, show_main_menu
 from interface.game_history import show_game_history
-from interface.display import display_message
-from mechanics.start_and_load import load_and_play_game, start_new_game
+from interface.file_menu import show_file_menu
+from mechanics.initialize_new_game import initialize_new_game
+from files.log_error import log_error
+from files.load_saved_game import load_saved_game
+from mechanics.game_flow import play_game
 
-def render_main_menu() -> None:
+def main_menu() -> None:
     """
     Renderiza o menu principal e executa a ação correspondente.
 
     Retorno:
     None
     """
-    while True:
-        choice = show_main_menu()
-        if choice == '1':  # Iniciar jogo
-            mode = input("Selecione o modo de jogo (1: Um jogador, 2: Dois jogadores): ").strip()
-            if mode == '1' or mode == '2':
-                player1_name = input("Digite o nome do jogador 1: ").strip()
-                player2_name = None
-                if mode == '2':
-                    player2_name = input("Digite o nome do jogador 2: ").strip()
-                if not start_new_game(mode, player1_name, player2_name):
+    try:
+        while True:
+            choice = show_main_menu()
+            actions = {
+                '1': initialize_new_game,
+                '2': lambda: play_game(load_saved_game(show_file_menu('carregar'))),
+                '3': show_game_history,
+                '4': lambda: print("\nConfigurações: Ainda a implementar..."),
+                '5': show_game_rules,
+                '6': show_credits,
+                '7': sys.exit
+            }
+            action = actions.get(choice)
+            if action:
+                if not action():
                     continue
             else:
-                display_message("Opção inválida. Tente novamente.")
-        elif choice == '2':  # Carregar jogo
-            if not load_and_play_game():
-                continue
-        elif choice == '3':  # Histórico de partidas
-            show_game_history()
-        elif choice == '4':  # Configurações
-            display_message("\nConfigurações: Ainda a implementar...")
-        elif choice == '5':  # Ver regras
-            show_game_rules()
-        elif choice == '6':  # Créditos
-            show_credits()
-        elif choice == '7':  # Sair
-            sys.exit()
+                print("Opção inválida. Tente novamente.")
+    except Exception as e:
+        print("Erro ao executar o menu principal. Verifique o arquivo de log para mais detalhes.")
+        log_error(f"Erro ao executar o menu principal: {str(e)}")

@@ -1,6 +1,6 @@
-def initialize_game(size: int, mode: str, player1_name: str, player2_name: str = None) -> dict:
+def create_initial_game_state(size: int, mode: str, player1_name: str, player2_name: str = None) -> dict:
     """
-    Inicializa o estado do jogo.
+    Cria o estado inicial do jogo.
 
     Parâmetros:
     size (int) → Tamanho do tabuleiro.
@@ -19,5 +19,6 @@ def initialize_game(size: int, mode: str, player1_name: str, player2_name: str =
         "moves": 0,
         "mode": mode,
         "player1_name": player1_name,
-        "player2_name": player2_name if player2_name else "IA"
+        "player2_name": player2_name,
+        "save_name": None 
     }

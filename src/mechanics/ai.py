@@ -1,4 +1,5 @@
 from mechanics.game_logic import count_consecutive, is_winner
+from files.log_error import log_error
 
 def ai_move(state: dict) -> tuple[int, int]:
     """
@@ -10,16 +11,21 @@ def ai_move(state: dict) -> tuple[int, int]:
     Retorno:
     tuple[int, int] → Coordenadas (x, y) do próximo movimento da IA.
     """
-    size = state['size']
-    board = state['board']
-    player = state['turn']
-    opponent = 'X' if player == 'O' else 'O'
+    try:
+        size = state['size']
+        board = state['board']
+        player = state['turn']
+        opponent = 'X' if player == 'O' else 'O'
 
-    best_move = get_best_move(state, size, board, player, opponent)
-    if best_move != (-1, -1) and board[best_move[0] - 1][best_move[1] - 1] == '.':
-        return best_move
+        best_move = get_best_move(state, size, board, player, opponent)
+        if best_move != (-1, -1) and board[best_move[0] - 1][best_move[1] - 1] == '.':
+            return best_move
 
-    return get_random_move(size, board)
+        return get_random_move(size, board)
+    except Exception as e:
+        print("Erro ao decidir o movimento da IA. Verifique o arquivo de log para mais detalhes.")
+        log_error(f"Erro ao decidir o movimento da IA: {str(e)}")
+        return -1, -1
 
 def get_best_move(state: dict, size: int, board: list, player: str, opponent: str) -> tuple[int, int]:
     """
