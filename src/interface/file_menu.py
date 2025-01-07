@@ -11,20 +11,24 @@ def get_filename(files: list[str]) -> str | None:
     Retorno:
     str | None → Nome do arquivo escolhido ou None se o usuário optar por voltar.
     """
-    try:
-        filename = input("Digite o nome do novo arquivo (sem extensão): ") + ".save"
-        if filename in files:
-            confirm = input(f"O arquivo '{filename}' já existe. Deseja sobrescrevê-lo? (s/n): ").strip().lower()
-            if confirm == 's':
-                return filename
-            else:
-                print("Operação cancelada. Voltando ao menu de arquivos.")
-                return None
-        return filename
-    except Exception as e:
-        print("Erro ao obter o nome do arquivo. Verifique o arquivo de log para mais detalhes.")
-        log_error(f"Erro ao obter o nome do arquivo: {str(e)}")
-        return None
+    while True:
+        try:
+            filename = input("Digite o nome do novo arquivo (sem extensão) ou 0 para voltar: ")
+            if filename == '0':
+                return None  # Voltar ao menu de arquivos se '0' for selecionado
+            filename += ".save"
+            if filename in files:
+                confirm = input(f"O arquivo '{filename}' já existe. Deseja sobrescrevê-lo? (s/n): ").strip().lower()
+                if confirm == 's':
+                    return filename
+                else:
+                    print("Operação cancelada. Voltando ao menu de arquivos.")
+                    return None
+            return filename
+        except Exception as e:
+            print("Erro ao obter o nome do arquivo. Verifique o arquivo de log para mais detalhes.")
+            log_error(f"Erro ao obter o nome do arquivo: {str(e)}")
+            return None
 
 def get_choice(files: list[str]) -> str | None:
     """
@@ -60,22 +64,18 @@ def handle_file_menu(action: str, files: list[str]) -> str | None:
     Retorno:
     str | None → Nome do arquivo escolhido ou None se o usuário optar por voltar.
     """
-    try:
-        while True:
-            if action == 'salvar':
-                filename = get_filename(files)
-                if filename:
-                    return filename
-            else:
-                choice = get_choice(files)
-                if choice is not None:
-                    return choice
-                else:
-                    return None
-    except Exception as e:
-        print("Erro ao lidar com o menu de arquivos. Verifique o arquivo de log para mais detalhes.")
-        log_error(f"Erro ao lidar com o menu de arquivos: {str(e)}")
-        return None
+    if action == 'salvar':
+        filename = get_filename(files)
+        if filename is not None:
+            return filename
+        else:
+            return None
+    else:
+        choice = get_choice(files)
+        if choice is not None:
+            return choice
+        else:
+            return None
     
 def show_file_menu(action: str) -> str | None:
     """

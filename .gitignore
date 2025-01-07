@@ -1,4 +1,8 @@
 saves/
+tests/
+poetry.lock
+pyproject.toml
+run_tests.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -171,3 +175,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ensure src directory is not ignored
+# src/

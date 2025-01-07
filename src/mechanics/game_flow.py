@@ -23,8 +23,11 @@ def play_game(state: dict) -> bool:
                 if not process_ai_move(state):
                     continue
             else:
-                if not process_player_move(state):
-                    continue
+                result = process_player_move(state)
+                if result is None:
+                    return False  # Voltar ao menu principal
+                if not result:
+                    continue  # Jogada inválida, continuar no loop do jogo
         except Exception as e:
             log_error(f"Erro na execução do jogo: {str(e)}")
             print("Ocorreu um erro durante o jogo. Verifique o arquivo de log para mais detalhes.")
@@ -73,7 +76,7 @@ def process_ai_move(state: dict) -> bool:
         log_error(f"Erro ao processar a jogada da IA: {str(e)}")
         return False
 
-def process_player_move(state: dict) -> bool:
+def process_player_move(state: dict) -> bool | None:
     """
     Processa a jogada do jogador.
 
@@ -86,11 +89,13 @@ def process_player_move(state: dict) -> bool:
     try:
         user_input = input("> ").strip()
         if user_input.lower() == 'p':  # Caso o jogador pressione 'P'
-            new_state, new_save_name = handle_pause_menu(state)
+            new_state, menu = handle_pause_menu(state)
+            if menu is None:
+                return None  # Voltar ao menu principal
             if new_state is None:
-                return False  # Voltar ao menu principal
+                return False  # Voltar ao menu de pausa
             state.update(new_state)
-            state['save_name'] = new_save_name
+            state['save_name'] = new_state.get('save_name', state['save_name'])
             return True
 
         valid_move, state = process_user_move(state, user_input)
