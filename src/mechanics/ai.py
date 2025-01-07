@@ -1,3 +1,4 @@
+import random
 from mechanics.game_logic import count_consecutive, is_winner
 from files.log_error import log_error
 
@@ -105,11 +106,10 @@ def get_random_move(size: int, board: list) -> tuple[int, int]:
     Retorno:
     tuple[int, int] → Coordenadas (x, y) de um movimento aleatório encontrado.
     """
-    for x in range(size):
-        for y in range(size):
-            if board[x][y] == '.':
-                return x + 1, y + 1
-    return 1, 1
+    empty_cells = [(x, y) for x in range(size) for y in range(size) if board[x][y] == '.']
+    if not empty_cells:
+        return -1, -1
+    return random.choice(empty_cells)
 
 def calculate_move_score(state: dict, x: int, y: int, player: str) -> int:
     """
