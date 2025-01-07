@@ -1,5 +1,5 @@
 saves/
-tests/
+tests/*
 poetry.lock
 pyproject.toml
 run_tests.py
