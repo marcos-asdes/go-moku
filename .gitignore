@@ -3,6 +3,7 @@ tests/
 poetry.lock
 pyproject.toml
 run_tests.py
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
